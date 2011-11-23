@@ -1,0 +1,192 @@
+body {
+    margin: 20px auto;
+    width: 100%;
+    height: 100%;
+}
+
+#container {
+    width: 80%;
+    margin: 0px auto;
+    text-align: center;
+}
+
+/* --------------------------------------------- */
+/*  ADLファイルのセレクト画面                    */
+/* --------------------------------------------- */
+#concept {
+    width: 100%;
+    display: block;
+}
+
+#selectConcept {
+    width: 90%;
+}
+
+/* --------------------------------------------- */
+/*  ajax loaderの表示部分                        */
+/* --------------------------------------------- */
+#loading {
+  display: none;
+  text-align: center;
+}
+
+/* --------------------------------------------- */
+/*  タイトル設定                                 */
+/* --------------------------------------------- */
+h1 {
+    font-size: 24px;
+    color: #000000;
+}
+h1 a { color: #000000; text-decoration: none; }
+h1 a:hover { color: #000000; }
+h1 a:visited { color: #000000; }
+h1 a:link { color: #000000; }
+
+/* --------------------------------------------- */
+/* XML 解析結果の表示部分                        */
+/* --------------------------------------------- */
+#xml { width: 100%;
+    margin-bottom: 10px;
+}
+
+#xml table {
+    width: 100%;
+    border: 1px #E3E3E3 solid;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+#xml th {
+    padding: 5px;
+    border: #E3E3E3 solid;
+    border-width: 0 0 1px 1px;
+    background: #F5F5F5;
+    font-weight: bold;
+    line-height: 120%;
+    text-align: left;
+}
+
+#xml td {
+    padding: 5px;
+    border: 1px #E3E3E3 solid;
+    border-width: 0 0 1px 1px;
+    text-align: left;
+    vertical-align: top;
+}
+
+#selectEHR {
+  width: 100%;
+}
+
+#selectComposition {
+  width: 100%;
+}
+
+#selectEntry {
+  width: 100%;
+}
+
+/* --------------------------------------------- */
+/* AQBE テーブルの表示部分                       */
+/* --------------------------------------------- */
+#aqbe {
+    display: none;
+}
+
+#aqbe table {
+    width: 100%;
+    border: 1px #E3E3E3 solid;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+#aqbe th {
+    padding: 5px;
+    border: #E3E3E3 solid;
+    border-width: 0 0 1px 1px;
+    background: #F5F5F5;
+    font-weight: bold;
+    line-height: 120%;
+    text-align: left;
+}
+
+#aqbe td {
+    padding: 5px;
+    text-align: left;
+    vertical-align: top;
+    border: 1px #E3E3E3 solid;
+    border-width: 0 0 1px 0;
+}
+
+#aqbe .name {
+    width: 15%;
+}
+
+#aqbe .menu {
+    text-align: right;
+}
+
+.input_name {
+  width: 20%;
+}
+
+.object {
+  display: none;
+}
+
+.in {
+  display: none;
+}
+
+/* --------------------------------------------- */
+/* Condition Box の表示                          */
+/* --------------------------------------------- */
+#condition {
+    width: 100%;
+    border: 1px #e3e3e3 solid;
+    display: none;
+}
+
+#condition div {
+  width: 90%;
+  border: 1px #e3e3e3 solid;
+  text-align: left;
+  font-size: 1.2em;
+  padding: 5px;
+  margin-top: 5px;
+  margin-left: 5%;
+  margin-bottom: 5px;
+}
+
+#condition input {
+  margin: 10px;
+}
+
+/* --------------------------------------------- */
+/* 生成したAQLの表示                             */
+/* --------------------------------------------- */
+#showAql {
+    width: 100%;
+    border: 1px #e3e3e3 solid;
+    display: none;
+}
+
+#showAql textarea {
+  width: 95%;
+  height: 400px;
+}
+
+/* --------------------------------------------- */
+/* in/notin/equals ファンクション用              */
+/* --------------------------------------------- */
+#inline {
+  width: 100%;
+}
+
+#inline iframe {
+  width: 100%;
+}
+
+#inlineButton {
+  display: none;
+}

@@ -1,0 +1,43 @@
+<div id="container" class="lift:surround?with=default;at=content">
+
+<div id="content">
+
+<lift:snippet type="Title:show" />
+
+<div id="concept">
+<form>
+  <lift:SelectConcept.show>
+    <concept:conceptField />
+    <concept:selectConceptForm/>
+    <concept:inlineField/>
+    <input type="button" name="selectConceptSubmit" value="Send" />
+    <input type="hidden" name="selectedConcept" value="" />
+  </lift:SelectConcept.show>
+</form>
+</div>
+
+<div id="loading">
+<img src="images/ajax-loader.gif" />
+</div>
+
+<lift:snippet type="SelectConcept.concept" />
+
+<div id="condition">
+<input type="button" value="Generate AQL" id="generateAql" />
+<input type="hidden" value="0" id="sendCount" />
+</div><!-- end condition -->
+
+<div id="showAql">
+<textarea></textarea>
+<input type="hidden" id="inlineArea" value="" />
+<input type="button" id="inlineButton" value="Send Object" />
+</div><!-- end showAql -->
+
+</div>
+
+<div id="inline">
+<iframe src="" />
+</div>
+
+</div>
+
