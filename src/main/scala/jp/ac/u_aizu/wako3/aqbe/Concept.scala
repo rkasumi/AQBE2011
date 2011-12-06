@@ -56,7 +56,7 @@ object AdlComposition {
           getAttributes.get(0).getChildren.toList
       } getOrElse (List())
     } map { AdlAttribute(_, ontology) }
-    
+
     new AdlComposition(name, contextList)
   }
 }
