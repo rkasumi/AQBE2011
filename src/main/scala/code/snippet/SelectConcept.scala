@@ -77,7 +77,9 @@ class SelectConcept extends AdlTo {
                               node ⇒
                                 node match {
                                   case isComposition(n)⇒
-                                  case isAdl(t, n)⇒ <option name={ node.toString } value={ t + n } join={ x._2.toString }>{ t + " : " + n }</option>
+                                  // TODO カテゴリー表示をしない
+                                  case isAdl(t, n)⇒ <option name={ node.toString } value={ t + n } join={ x._2.toString }>{ n }</option>
+//                                  case isAdl(t, n)⇒ <option name={ node.toString } value={ t + n } join={ x._2.toString }>{ t + " : " + n }</option>
                                   case _⇒
                                 }
                             }

@@ -11,7 +11,9 @@ object ConceptList {
       (html \\ "a") map (_.text) map {
         item ⇒
           item match {
-            case regrex(dataType, dataName) ⇒ Some((dataType + " : " + dataName, item))
+            // TODO カテゴリー表示をしない
+            case regrex(dataType, dataName) ⇒ Some(dataName, item)
+//            case regrex(dataType, dataName) ⇒ Some((dataType + " : " + dataName, item))
             case _                          ⇒ None
           }
       } flatten
