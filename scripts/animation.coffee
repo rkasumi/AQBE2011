@@ -31,15 +31,75 @@ loadEvent = ->
     $("#aqbe").slideDown(300)
     $("#condition").hide(300)
 
-  $("#selectComposition, #selectEntry").click ->
+  $("#selectComposition").click ->
     i = 0
     num = 0
     val = $(@).val()
+    # 選択中のコンセプト番号を取得して表示
+    $("#selectComposition option, #selectComposition option").each( ->
+      if $(@).val() is val then num = i
+      i++
+    )
+    $("[name=selectedConcept]").val("c#{num}")
+
+    # 選択されたかどうかを確認する部分
+    selectedValue = $(@).children(":selected").attr("name")
+    selectedJoin = $(@).children(":selected").attr("join")
+    select = "COMPOSITION" if selectedValue.indexOf("COMPOSITION") != -1
+    if $("#fromConcept").val() == ""
+      $("#fromConcept").val("#{selectedJoin},#{select} c#{num}[#{selectedValue}]")
+    else if $("#fromConcept").val().indexOf(selectedValue) == -1
+      $("#fromConcept").val($("#fromConcept").val() + "|#{selectedJoin},#{select} c#{num}[#{selectedValue}]")
+
+    # アニメーション
+    $("#aqbe").slideUp(100)
+    $(".aqbe_table").hide()
+    $("##{$(@).val()}").show()
+    $("#aqbe").slideDown(300)
+    $("#condition").hide(300)
+
+  $("#selectEntry").click ->
+    i = 0
+    num = 0
+    val = $(@).val()
+    # 選択中のコンセプト番号を取得して表示
     $("#selectComposition option, #selectEntry option").each( ->
       if $(@).val() is val then num = i
       i++
     )
     $("[name=selectedConcept]").val("c#{num}")
+
+    # 選択されたかどうかを確認する部分
+    selectedValue = $(@).children(":selected").attr("name")
+    join = $(@).children(":selected").attr("join")
+    select = "OBSERVATION" if selectedValue.indexOf("OBSERVATION") != -1
+    select = "SECTION" if selectedValue.indexOf("SECTION") != -1
+    select = "ITEM_TREE" if selectedValue.indexOf("ITEM_TREE") != -1
+    select = "EVALUATION" if selectedValue.indexOf("EVALUATION") != -1
+    select = "INSTRUCTION" if selectedValue.indexOf("INSTRUCTION") != -1
+    select = "ACTION" if selectedValue.indexOf("ACTION") != -1
+    select = "ADMIN_ENTRY" if selectedValue.indexOf("ADMIN_ENTRY") != -1
+    if $("#fromConcept").val() == ""
+      $("#fromConcept").val("#{join},#{select} c#{num}[#{selectedValue}]")
+    else if $("#fromConcept").val().indexOf(selectedValue) == -1
+      $("#fromConcept").val($("#fromConcept").val() + "|#{join},#{select} c#{num}[#{selectedValue}]")
+
+    $("#selectComposition option").each( ->
+      if $(@).attr("join") == join
+        val = $(@).val()
+        i = 0
+        $("#selectComposition option, #selectEntry option").each( ->
+          if $(@).val() is val then num = i
+          i++
+        )
+        name = $(@).attr("name")
+        if $("#fromConcept").val() == ""
+          $("#fromConcept").val("COMPOSITION c#{num}[#{name}]")
+        else if $("#fromConcept").val().indexOf(name) == -1
+          $("#fromConcept").val($("#fromConcept").val() + "|#{join},COMPOSITION c#{num}[#{name}]")
+    )
+
+    # アニメーション
     $("#aqbe").slideUp(100)
     $(".aqbe_table").hide()
     $("##{$(@).val()}").show()
@@ -295,22 +355,25 @@ loadEvent = ->
     tag += "\tEHR e[ehr_id=$ehrId]\n"
     i = 0
     from = {}
-    $("#selectComposition option, #selectEntry option").each( ->
-      temp = ""
-      temp += "COMPOSITION" if $(@).attr("name").indexOf("COMPOSITION") != -1
-      temp += "OBSERVATION" if $(@).attr("name").indexOf("OBSERVATION") != -1
-      temp += "SECTION" if $(@).attr("name").indexOf("SECTION") != -1
-      temp += "ITEM_TREE" if $(@).attr("name").indexOf("ITEM_TREE") != -1
-      temp += "EVALUATION" if $(@).attr("name").indexOf("EVALUATION") != -1
-      temp += "INSTRUCTION" if $(@).attr("name").indexOf("INSTRUCTION") != -1
-      temp += "ACTION" if $(@).attr("name").indexOf("ACTION") != -1
-      temp += "ADMIN_ENTRY" if $(@).attr("name").indexOf("ADMIN_ENTRY") != -1
-      temp += " c#{i++}[#{$(@).attr("name")}]\n"
-      unless from["#{$(@).attr("join")}"]?
-        from["#{$(@).attr("join")}"] = "\t\t" + temp
+    for v in $("#fromConcept").val().split("|")
+      [j, k] = v.split(",")
+      unless from["#{j}"]?
+        from["#{j}"] = "\t\t" + k + "\n"
       else
-        from["#{$(@).attr("join")}"] += "\t\tCONTAINS " + temp
-    )
+        from["#{j}"] += "\t\tCONTAINS " + k + "\n"
+
+    # $("#selectComposition option, #selectEntry option").each( ->
+      # temp = ""
+      # temp += "COMPOSITION" if $(@).attr("name").indexOf("COMPOSITION") != -1
+      # temp += "OBSERVATION" if $(@).attr("name").indexOf("OBSERVATION") != -1
+      # temp += "SECTION" if $(@).attr("name").indexOf("SECTION") != -1
+      # temp += "ITEM_TREE" if $(@).attr("name").indexOf("ITEM_TREE") != -1
+      # temp += "EVALUATION" if $(@).attr("name").indexOf("EVALUATION") != -1
+      # temp += "INSTRUCTION" if $(@).attr("name").indexOf("INSTRUCTION") != -1
+      # temp += "ACTION" if $(@).attr("name").indexOf("ACTION") != -1
+      # temp += "ADMIN_ENTRY" if $(@).attr("name").indexOf("ADMIN_ENTRY") != -1
+      # temp += " c#{i++}[#{$(@).attr("name")}]\n"
+    # )
 
     fromCount = 0
     for fromKey, fromValue of from then fromCount++

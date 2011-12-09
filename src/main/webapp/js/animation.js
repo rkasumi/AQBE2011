@@ -37,8 +37,36 @@ loadEvent = function() {
     $("#aqbe").slideDown(300);
     return $("#condition").hide(300);
   });
-  $("#selectComposition, #selectEntry").click(function() {
-    var i, num, val;
+  $("#selectComposition").click(function() {
+    var i, num, select, selectedJoin, selectedValue, val;
+    i = 0;
+    num = 0;
+    val = $(this).val();
+    $("#selectComposition option, #selectComposition option").each(function() {
+      if ($(this).val() === val) {
+        num = i;
+      }
+      return i++;
+    });
+    $("[name=selectedConcept]").val("c" + num);
+    selectedValue = $(this).children(":selected").attr("name");
+    selectedJoin = $(this).children(":selected").attr("join");
+    if (selectedValue.indexOf("COMPOSITION") !== -1) {
+      select = "COMPOSITION";
+    }
+    if ($("#fromConcept").val() === "") {
+      $("#fromConcept").val("" + selectedJoin + "," + select + " c" + num + "[" + selectedValue + "]");
+    } else if ($("#fromConcept").val().indexOf(selectedValue) === -1) {
+      $("#fromConcept").val($("#fromConcept").val() + ("|" + selectedJoin + "," + select + " c" + num + "[" + selectedValue + "]"));
+    }
+    $("#aqbe").slideUp(100);
+    $(".aqbe_table").hide();
+    $("#" + ($(this).val())).show();
+    $("#aqbe").slideDown(300);
+    return $("#condition").hide(300);
+  });
+  $("#selectEntry").click(function() {
+    var i, join, num, select, selectedValue, val;
     i = 0;
     num = 0;
     val = $(this).val();
@@ -49,6 +77,53 @@ loadEvent = function() {
       return i++;
     });
     $("[name=selectedConcept]").val("c" + num);
+    selectedValue = $(this).children(":selected").attr("name");
+    join = $(this).children(":selected").attr("join");
+    if (selectedValue.indexOf("OBSERVATION") !== -1) {
+      select = "OBSERVATION";
+    }
+    if (selectedValue.indexOf("SECTION") !== -1) {
+      select = "SECTION";
+    }
+    if (selectedValue.indexOf("ITEM_TREE") !== -1) {
+      select = "ITEM_TREE";
+    }
+    if (selectedValue.indexOf("EVALUATION") !== -1) {
+      select = "EVALUATION";
+    }
+    if (selectedValue.indexOf("INSTRUCTION") !== -1) {
+      select = "INSTRUCTION";
+    }
+    if (selectedValue.indexOf("ACTION") !== -1) {
+      select = "ACTION";
+    }
+    if (selectedValue.indexOf("ADMIN_ENTRY") !== -1) {
+      select = "ADMIN_ENTRY";
+    }
+    if ($("#fromConcept").val() === "") {
+      $("#fromConcept").val("" + join + "," + select + " c" + num + "[" + selectedValue + "]");
+    } else if ($("#fromConcept").val().indexOf(selectedValue) === -1) {
+      $("#fromConcept").val($("#fromConcept").val() + ("|" + join + "," + select + " c" + num + "[" + selectedValue + "]"));
+    }
+    $("#selectComposition option").each(function() {
+      var name;
+      if ($(this).attr("join") === join) {
+        val = $(this).val();
+        i = 0;
+        $("#selectComposition option, #selectEntry option").each(function() {
+          if ($(this).val() === val) {
+            num = i;
+          }
+          return i++;
+        });
+        name = $(this).attr("name");
+        if ($("#fromConcept").val() === "") {
+          return $("#fromConcept").val("COMPOSITION c" + num + "[" + name + "]");
+        } else if ($("#fromConcept").val().indexOf(name) === -1) {
+          return $("#fromConcept").val($("#fromConcept").val() + ("|" + join + ",COMPOSITION c" + num + "[" + name + "]"));
+        }
+      }
+    });
     $("#aqbe").slideUp(100);
     $(".aqbe_table").hide();
     $("#" + ($(this).val())).show();
@@ -373,7 +448,7 @@ loadEvent = function() {
     return initDelete();
   });
   $("#generateAql").click(function() {
-    var c, from, fromCount, fromKey, fromValue, i, key, selectFlag, tag, tagTemp, v, value;
+    var c, from, fromCount, fromKey, fromValue, i, j, k, key, selectFlag, tag, tagTemp, v, value, _i, _len, _ref, _ref2;
     tag = "SELECT \n";
     selectFlag = 0;
     $(".checkedBox").each(function() {
@@ -390,40 +465,16 @@ loadEvent = function() {
     tag += "\tEHR e[ehr_id=$ehrId]\n";
     i = 0;
     from = {};
-    $("#selectComposition option, #selectEntry option").each(function() {
-      var temp;
-      temp = "";
-      if ($(this).attr("name").indexOf("COMPOSITION") !== -1) {
-        temp += "COMPOSITION";
-      }
-      if ($(this).attr("name").indexOf("OBSERVATION") !== -1) {
-        temp += "OBSERVATION";
-      }
-      if ($(this).attr("name").indexOf("SECTION") !== -1) {
-        temp += "SECTION";
-      }
-      if ($(this).attr("name").indexOf("ITEM_TREE") !== -1) {
-        temp += "ITEM_TREE";
-      }
-      if ($(this).attr("name").indexOf("EVALUATION") !== -1) {
-        temp += "EVALUATION";
-      }
-      if ($(this).attr("name").indexOf("INSTRUCTION") !== -1) {
-        temp += "INSTRUCTION";
-      }
-      if ($(this).attr("name").indexOf("ACTION") !== -1) {
-        temp += "ACTION";
-      }
-      if ($(this).attr("name").indexOf("ADMIN_ENTRY") !== -1) {
-        temp += "ADMIN_ENTRY";
-      }
-      temp += " c" + (i++) + "[" + ($(this).attr("name")) + "]\n";
-      if (from["" + ($(this).attr("join"))] == null) {
-        return from["" + ($(this).attr("join"))] = "\t\t" + temp;
+    _ref = $("#fromConcept").val().split("|");
+    for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+      v = _ref[_i];
+      _ref2 = v.split(","), j = _ref2[0], k = _ref2[1];
+      if (from["" + j] == null) {
+        from["" + j] = "\t\t" + k + "\n";
       } else {
-        return from["" + ($(this).attr("join"))] += "\t\tCONTAINS " + temp;
+        from["" + j] += "\t\tCONTAINS " + k + "\n";
       }
-    });
+    }
     fromCount = 0;
     for (fromKey in from) {
       fromValue = from[fromKey];
