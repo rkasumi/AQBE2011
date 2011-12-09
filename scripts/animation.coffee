@@ -344,9 +344,9 @@ loadEvent = ->
     $("#condition").hide(300)
 
     # inline用
-    unless $("#inlineField").val() == ""
+    unless $("[name=inlineField]").val() == ""
       $("#inlineArea").val(tag.replaceAll("\n", "%cr%").replaceAll("\t", "%tab%"))
-      $("#inlineButton").show()
+      $(".inlineShow").show()
 
     # ＜＞を小文字に変換してtextareaに追加
     tag = tag.replaceAll("%big%", "<")

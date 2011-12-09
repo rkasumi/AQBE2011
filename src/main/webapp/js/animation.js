@@ -467,9 +467,9 @@ loadEvent = function() {
     }
     $("#xml").hide(300);
     $("#condition").hide(300);
-    if ($("#inlineField").val() !== "") {
+    if ($("[name=inlineField]").val() !== "") {
       $("#inlineArea").val(tag.replaceAll("\n", "%cr%").replaceAll("\t", "%tab%"));
-      $("#inlineButton").show();
+      $(".inlineShow").show();
     }
     tag = tag.replaceAll("%big%", "<");
     tag = tag.replaceAll("%small%", ">");
