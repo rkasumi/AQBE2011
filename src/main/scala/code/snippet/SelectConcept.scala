@@ -189,6 +189,7 @@ class SelectConcept extends AdlTo {
           <div class={ node.hashCode.toString + "ashow" } name="show" style="display: block;"></div>
         </td>
       </tr>
+{/*
       <tr>
         <td>
           <input type="checkbox" class="checkbox" name="/name/value" value={ node.hashCode.toString + "n" }/>
@@ -276,6 +277,7 @@ class SelectConcept extends AdlTo {
           <div class={ node.hashCode.toString + "mshow" } name="show" style="display: block;"></div>
         </td>
       </tr>
+      */}
       {
         node match {
           case AdlObservation(name, dataList, stateList, protocolList) ⇒ {
