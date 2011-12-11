@@ -122,7 +122,11 @@ ConditionBox = (function() {
         tag += "" + this.path + " " + this.con + " %cr%(" + this.value + ")";
         break;
       default:
-        tag += "" + this.path + " " + this.con + " '" + this.value + "'";
+        if (this.value.indexOf("current-date()") !== -1) {
+          tag += "" + this.path + " " + this.con + " " + this.value;
+        } else {
+          tag += "" + this.path + " " + this.con + " '" + this.value + "'";
+        }
     }
     tag += "\" />";
     tag += "</div>";

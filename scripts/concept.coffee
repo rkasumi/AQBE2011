@@ -74,7 +74,10 @@ class ConditionBox
       when "in", "notin", "equals"
         tag += "#{@path} #{@con} %cr%(#{@value})"
       else
-        tag += "#{@path} #{@con} '#{@value}'"
+        if @value.indexOf("current-date()") != -1 # current-dateが含まれていればfunctionなので''なし
+          tag += "#{@path} #{@con} #{@value}"
+        else
+          tag += "#{@path} #{@con} '#{@value}'"
     tag += "\" />"
 
     # end div

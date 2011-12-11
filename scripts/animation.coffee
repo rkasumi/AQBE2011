@@ -527,3 +527,18 @@ inputfunction = (obj) ->
   $(".#{hash}show").append(tag)
   $("[name=#{number}]").show()
   initDelete()
+
+# currentdate ファンクション
+openGenerateDate = (obj) ->
+  $(obj).next().toggle()
+generateDate = (obj) ->
+  num = $(obj).prev().prev().val()
+  type = $(obj).prev().val()
+  if num is "0"
+    value = "current-date()"
+  else
+    value = "current-date() - P#{num}#{type}"
+  target = $(obj).parent().prev().prev()
+  target.val(value)
+  $(obj).parent().hide()
+

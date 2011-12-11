@@ -256,8 +256,19 @@ case class DvDateTime(name: String, path: String) extends DvElement with AdlTo {
   override def toString = super.toString + " <1990/01/01>\n"
   override def toHtml = {
     val dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss")
-    <input type="text" class="dv_date" name={ hash } value="1990-01-01-00:00:00" min="1990-01-01-00:00:00" max={ dateFormat.format(new Date) }/>
-    <input type="button" value="Today" onclick={ "$(this).prev().val('" + dateFormat.format(new Date) + "')" }/>
+    <xml:group>
+      <input type="text" class="dv_date" name={ hash } value="1990-01-01-00:00:00" min="1990-01-01-00:00:00" max={ dateFormat.format(new Date) }/>
+      <input type="button" value="function" onclick="openGenerateDate(this)"/>
+      <span style="display: none;">
+        current-date() - P<input type="number" min="-100" max="0" value="0" size="2"/>
+        <select>
+          <option value="Y">year</option>
+          <option value="W">week</option>
+          <option value="D">day</option>
+        </select>
+        <input type="button" value="Generate" onclick="generateDate(this)"/>
+      </span>
+    </xml:group>
   }
 }
 

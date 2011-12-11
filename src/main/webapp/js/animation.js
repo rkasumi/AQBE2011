@@ -1,4 +1,4 @@
-var conditionCount, initDelete, initInline, input, inputfunction, loadEvent;
+var conditionCount, generateDate, initDelete, initInline, input, inputfunction, loadEvent, openGenerateDate;
 var __indexOf = Array.prototype.indexOf || function(item) {
   for (var i = 0, l = this.length; i < l; i++) {
     if (this[i] === item) return i;
@@ -640,4 +640,20 @@ inputfunction = function(obj) {
   $("." + hash + "show").append(tag);
   $("[name=" + number + "]").show();
   return initDelete();
+};
+openGenerateDate = function(obj) {
+  return $(obj).next().toggle();
+};
+generateDate = function(obj) {
+  var num, target, type, value;
+  num = $(obj).prev().prev().val();
+  type = $(obj).prev().val();
+  if (num === "0") {
+    value = "current-date()";
+  } else {
+    value = "current-date() - P" + num + type;
+  }
+  target = $(obj).parent().prev().prev();
+  target.val(value);
+  return $(obj).parent().hide();
 };
