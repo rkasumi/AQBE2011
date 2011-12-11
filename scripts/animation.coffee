@@ -208,6 +208,10 @@ loadEvent = ->
 
     # alldelete
     $(".object").each(-> $(@).remove())
+    $(":checked").each( ->
+      $(@)[0].checked = false
+      return
+    )
 
     # display
     $("#aqbe").hide(300)

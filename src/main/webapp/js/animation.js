@@ -238,6 +238,9 @@ loadEvent = function() {
     $(".object").each(function() {
       return $(this).remove();
     });
+    $(":checked").each(function() {
+      $(this)[0].checked = false;
+    });
     $("#aqbe").hide(300);
     $("#showAql").hide(300);
     return $("#condition").slideDown(300);
