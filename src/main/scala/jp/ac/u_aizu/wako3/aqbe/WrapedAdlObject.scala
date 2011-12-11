@@ -122,7 +122,7 @@ trait AdlTo {
                     {
                       attr match {
                         case _: DvMultipuleElements⇒ <xml:group></xml:group>
-                        case _    ⇒ <input type="button" value="Input" name={ attr.hashCode.toString } class="input"/>
+                        case _    ⇒ <input type="button" value="Input" name={ attr.hashCode.toString } class="input" onclick="input(this)"/>
                       }
                     }
                   </div>
@@ -143,7 +143,7 @@ trait AdlTo {
                       <option value="equals">equals</option>
                     </select>
                     <span func={ "func" + attr.hashCode.toString }></span>
-                    <input type="button" value="Input" name={ attr.hashCode.toString } class="inputfunction"/>
+                    <input type="button" value="Input" name={ attr.hashCode.toString } class="inputfunction" onclick="input(this)"/>
                     {
                       attr match {
                         case _: DvQuantity⇒ <input type="hidden" class="forDevide" value={ attr.path } name={ attr.name }/>

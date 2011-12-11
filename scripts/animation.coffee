@@ -118,6 +118,7 @@ loadEvent = ->
     else
       obj.slideUp(200)
       $(@).val("Input Condition")
+    exit()
 
   # function入力画面の開閉
   $(".input_function").click ->
@@ -203,8 +204,6 @@ loadEvent = ->
     $("#showAql").hide(300)
     $("#condition").slideDown(300)
 
-  # 条件入力処理
-  conditionCount = 0
 
   $(".function").change ->
     hash = $(@).attr("name")
@@ -317,27 +316,6 @@ loadEvent = ->
     initDelete()
 
 
-  $(".input").click ->
-    hash = $(@).attr("name")
-    param = {}
-    $("[name=#{hash}]").each( -> param[$(@).attr("class")] = $(@).val())
-
-    valueList = {}
-    for key, value of param
-      switch key
-        when "input_condition", "input_function", "function", "input", "inputfunction", "function" then value
-        when "name" then name = value
-        when "path" then path = $("[name=selectedConcept]").val() + value
-        when "condition" then condition = value
-        else
-          valueList[key] = value
-
-    number = "#{hash}_num#{conditionCount++}"
-    adl = new AdlAttribute(name, path, condition, valueList, number)
-    $(".#{hash}show").append(adl.toHtml())
-    $("[name=#{number}]").show(100)
-
-    initDelete()
 
   $("#generateAql").click ->
     # SELECT
@@ -512,3 +490,29 @@ initInline = ->
 
 String.prototype.replaceAll = (org,  dest) ->
     return this.split(org).join(dest);
+
+# 条件入力処理
+conditionCount = 0
+
+# Inputボタン
+input = (obj) ->
+  hash = $(obj).attr("name")
+  param = {}
+  $("[name=#{hash}]").each( -> param[$(@).attr("class")] = $(@).val())
+
+  valueList = {}
+  for key, value of param
+    switch key
+      when "input_condition", "input_function", "function", "input", "inputfunction", "function" then value
+      when "name" then name = value
+      when "path" then path = $("[name=selectedConcept]").val() + value
+      when "condition" then condition = value
+      else
+        valueList[key] = value
+
+  number = "#{hash}_num#{conditionCount++}"
+  adl = new AdlAttribute(name, path, condition, valueList, number)
+  $(".#{hash}show").append(adl.toHtml())
+  $("[name=#{number}]").show(100)
+
+  initDelete()

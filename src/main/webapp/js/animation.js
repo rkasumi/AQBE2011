@@ -1,4 +1,4 @@
-var initDelete, initInline, loadEvent;
+var conditionCount, initDelete, initInline, input, loadEvent;
 var __indexOf = Array.prototype.indexOf || function(item) {
   for (var i = 0, l = this.length; i < l; i++) {
     if (this[i] === item) return i;
@@ -10,7 +10,6 @@ $(function() {
   return initInline();
 });
 loadEvent = function() {
-  var conditionCount;
   $("#selectConcept").change(function() {
     var val;
     if ($("[name=selectConceptForm]").val() === "") {
@@ -138,11 +137,12 @@ loadEvent = function() {
       obj.slideDown(200);
       objF.hide();
       $(this).val("Close Condition");
-      return $(this).next().val("Input Function");
+      $(this).next().val("Input Function");
     } else {
       obj.slideUp(200);
-      return $(this).val("Input Condition");
+      $(this).val("Input Condition");
     }
+    return exit();
   });
   $(".input_function").click(function() {
     var obj, objC;
@@ -234,7 +234,6 @@ loadEvent = function() {
     $("#showAql").hide(300);
     return $("#condition").slideDown(300);
   });
-  conditionCount = 0;
   $(".function").change(function() {
     var baseUrl, hash, key, name, param, path, tag, value;
     hash = $(this).attr("name");
@@ -407,44 +406,6 @@ loadEvent = function() {
     }
     $("." + hash + "show").append(tag);
     $("[name=" + number + "]").show();
-    return initDelete();
-  });
-  $(".input").click(function() {
-    var adl, condition, hash, key, name, number, param, path, value, valueList;
-    hash = $(this).attr("name");
-    param = {};
-    $("[name=" + hash + "]").each(function() {
-      return param[$(this).attr("class")] = $(this).val();
-    });
-    valueList = {};
-    for (key in param) {
-      value = param[key];
-      switch (key) {
-        case "input_condition":
-        case "input_function":
-        case "function":
-        case "input":
-        case "inputfunction":
-        case "function":
-          value;
-          break;
-        case "name":
-          name = value;
-          break;
-        case "path":
-          path = $("[name=selectedConcept]").val() + value;
-          break;
-        case "condition":
-          condition = value;
-          break;
-        default:
-          valueList[key] = value;
-      }
-    }
-    number = "" + hash + "_num" + (conditionCount++);
-    adl = new AdlAttribute(name, path, condition, valueList, number);
-    $("." + hash + "show").append(adl.toHtml());
-    $("[name=" + number + "]").show(100);
     return initDelete();
   });
   $("#generateAql").click(function() {
@@ -632,4 +593,43 @@ initInline = function() {
 };
 String.prototype.replaceAll = function(org, dest) {
   return this.split(org).join(dest);
+};
+conditionCount = 0;
+input = function(obj) {
+  var adl, condition, hash, key, name, number, param, path, value, valueList;
+  hash = $(obj).attr("name");
+  param = {};
+  $("[name=" + hash + "]").each(function() {
+    return param[$(this).attr("class")] = $(this).val();
+  });
+  valueList = {};
+  for (key in param) {
+    value = param[key];
+    switch (key) {
+      case "input_condition":
+      case "input_function":
+      case "function":
+      case "input":
+      case "inputfunction":
+      case "function":
+        value;
+        break;
+      case "name":
+        name = value;
+        break;
+      case "path":
+        path = $("[name=selectedConcept]").val() + value;
+        break;
+      case "condition":
+        condition = value;
+        break;
+      default:
+        valueList[key] = value;
+    }
+  }
+  number = "" + hash + "_num" + (conditionCount++);
+  adl = new AdlAttribute(name, path, condition, valueList, number);
+  $("." + hash + "show").append(adl.toHtml());
+  $("[name=" + number + "]").show(100);
+  return initDelete();
 };
