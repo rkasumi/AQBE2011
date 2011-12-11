@@ -37,12 +37,13 @@ loadEvent = function() {
     return $("#condition").hide(300);
   });
   $("#selectComposition").click(function() {
-    var i, num, select, selectedJoin, selectedValue, val;
+    var fromV, i, num, select, selectedJoin, selectedValue, val, val2;
     i = 0;
     num = 0;
     val = $(this).val();
+    val2 = val + $(this).children(":selected").attr("join");
     $("#selectComposition option, #selectComposition option").each(function() {
-      if ($(this).val() === val) {
+      if (($(this).val() + $(this).attr("join")) === val2) {
         num = i;
       }
       return i++;
@@ -53,10 +54,11 @@ loadEvent = function() {
     if (selectedValue.indexOf("COMPOSITION") !== -1) {
       select = "COMPOSITION";
     }
+    fromV = "" + selectedJoin + "," + select + " c" + num + "[" + selectedValue + "]";
     if ($("#fromConcept").val() === "") {
-      $("#fromConcept").val("" + selectedJoin + "," + select + " c" + num + "[" + selectedValue + "]");
-    } else if ($("#fromConcept").val().indexOf(selectedValue) === -1) {
-      $("#fromConcept").val($("#fromConcept").val() + ("|" + selectedJoin + "," + select + " c" + num + "[" + selectedValue + "]"));
+      $("#fromConcept").val(fromV);
+    } else if ($("#fromConcept").val().indexOf(fromV) === -1) {
+      $("#fromConcept").val($("#fromConcept").val() + "|" + fromV);
     }
     $("#aqbe").slideUp(100);
     $(".aqbe_table").hide();
@@ -65,12 +67,13 @@ loadEvent = function() {
     return $("#condition").hide(300);
   });
   $("#selectEntry").click(function() {
-    var i, join, num, select, selectedValue, val;
+    var fromV, i, join, num, select, selectedValue, val, val2;
     i = 0;
     num = 0;
     val = $(this).val();
+    val2 = val + $(this).children(":selected").attr("join");
     $("#selectComposition option, #selectEntry option").each(function() {
-      if ($(this).val() === val) {
+      if (($(this).val() + $(this).attr("join")) === val2) {
         num = i;
       }
       return i++;
@@ -99,30 +102,34 @@ loadEvent = function() {
     if (selectedValue.indexOf("ADMIN_ENTRY") !== -1) {
       select = "ADMIN_ENTRY";
     }
-    if ($("#fromConcept").val() === "") {
-      $("#fromConcept").val("" + join + "," + select + " c" + num + "[" + selectedValue + "]");
-    } else if ($("#fromConcept").val().indexOf(selectedValue) === -1) {
-      $("#fromConcept").val($("#fromConcept").val() + ("|" + join + "," + select + " c" + num + "[" + selectedValue + "]"));
-    }
     $("#selectComposition option").each(function() {
-      var name;
+      var fromV, i2, name, num2;
       if ($(this).attr("join") === join) {
         val = $(this).val();
-        i = 0;
+        val2 = val + join;
+        i2 = 0;
+        num2 = 0;
         $("#selectComposition option, #selectEntry option").each(function() {
-          if ($(this).val() === val) {
-            num = i;
+          if (($(this).val() + $(this).attr("join")) === val2) {
+            num2 = i2;
           }
-          return i++;
+          return i2++;
         });
         name = $(this).attr("name");
+        fromV = "" + join + ",COMPOSITION c" + num2 + "[" + name + "]";
         if ($("#fromConcept").val() === "") {
-          return $("#fromConcept").val("COMPOSITION c" + num + "[" + name + "]");
-        } else if ($("#fromConcept").val().indexOf(name) === -1) {
-          return $("#fromConcept").val($("#fromConcept").val() + ("|" + join + ",COMPOSITION c" + num + "[" + name + "]"));
+          return $("#fromConcept").val(fromV);
+        } else if ($("#fromConcept").val().indexOf(fromV) === -1) {
+          return $("#fromConcept").val($("#fromConcept").val() + "|" + fromV);
         }
       }
     });
+    fromV = "" + join + "," + select + " c" + num + "[" + selectedValue + "]";
+    if ($("#fromConcept").val() === "") {
+      $("#fromConcept").val(fromV);
+    } else if ($("#fromConcept").val().indexOf(fromV) === -1) {
+      $("#fromConcept").val($("#fromConcept").val() + "|" + fromV);
+    }
     $("#aqbe").slideUp(100);
     $(".aqbe_table").hide();
     $("#" + ($(this).val())).show();

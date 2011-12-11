@@ -35,9 +35,10 @@ loadEvent = ->
     i = 0
     num = 0
     val = $(@).val()
+    val2 = val + $(@).children(":selected").attr("join")
     # 選択中のコンセプト番号を取得して表示
     $("#selectComposition option, #selectComposition option").each( ->
-      if $(@).val() is val then num = i
+      if ($(@).val() + $(@).attr("join")) is val2 then num = i
       i++
     )
     $("[name=selectedConcept]").val("c#{num}")
@@ -46,10 +47,11 @@ loadEvent = ->
     selectedValue = $(@).children(":selected").attr("name")
     selectedJoin = $(@).children(":selected").attr("join")
     select = "COMPOSITION" if selectedValue.indexOf("COMPOSITION") != -1
+    fromV = "#{selectedJoin},#{select} c#{num}[#{selectedValue}]"
     if $("#fromConcept").val() == ""
-      $("#fromConcept").val("#{selectedJoin},#{select} c#{num}[#{selectedValue}]")
-    else if $("#fromConcept").val().indexOf(selectedValue) == -1
-      $("#fromConcept").val($("#fromConcept").val() + "|#{selectedJoin},#{select} c#{num}[#{selectedValue}]")
+      $("#fromConcept").val(fromV)
+    else if $("#fromConcept").val().indexOf(fromV) == -1
+      $("#fromConcept").val($("#fromConcept").val() + "|" + fromV)
 
     # アニメーション
     $("#aqbe").slideUp(100)
@@ -62,9 +64,10 @@ loadEvent = ->
     i = 0
     num = 0
     val = $(@).val()
+    val2 = val + $(@).children(":selected").attr("join")
     # 選択中のコンセプト番号を取得して表示
     $("#selectComposition option, #selectEntry option").each( ->
-      if $(@).val() is val then num = i
+      if ($(@).val() + $(@).attr("join")) is val2 then num = i
       i++
     )
     $("[name=selectedConcept]").val("c#{num}")
@@ -79,25 +82,31 @@ loadEvent = ->
     select = "INSTRUCTION" if selectedValue.indexOf("INSTRUCTION") != -1
     select = "ACTION" if selectedValue.indexOf("ACTION") != -1
     select = "ADMIN_ENTRY" if selectedValue.indexOf("ADMIN_ENTRY") != -1
-    if $("#fromConcept").val() == ""
-      $("#fromConcept").val("#{join},#{select} c#{num}[#{selectedValue}]")
-    else if $("#fromConcept").val().indexOf(selectedValue) == -1
-      $("#fromConcept").val($("#fromConcept").val() + "|#{join},#{select} c#{num}[#{selectedValue}]")
 
     $("#selectComposition option").each( ->
       if $(@).attr("join") == join
         val = $(@).val()
-        i = 0
+        val2 = val + join
+        i2 = 0
+        num2 = 0
         $("#selectComposition option, #selectEntry option").each( ->
-          if $(@).val() is val then num = i
-          i++
+          if ($(@).val() + $(@).attr("join")) is val2 then num2 = i2
+          i2++
         )
         name = $(@).attr("name")
+        fromV = "#{join},COMPOSITION c#{num2}[#{name}]"
         if $("#fromConcept").val() == ""
-          $("#fromConcept").val("COMPOSITION c#{num}[#{name}]")
-        else if $("#fromConcept").val().indexOf(name) == -1
-          $("#fromConcept").val($("#fromConcept").val() + "|#{join},COMPOSITION c#{num}[#{name}]")
+          $("#fromConcept").val(fromV)
+        else if $("#fromConcept").val().indexOf(fromV) == -1
+          $("#fromConcept").val($("#fromConcept").val() + "|" + fromV)
     )
+
+    fromV = "#{join},#{select} c#{num}[#{selectedValue}]"
+    if $("#fromConcept").val() == ""
+      $("#fromConcept").val(fromV)
+    else if $("#fromConcept").val().indexOf(fromV) == -1
+      $("#fromConcept").val($("#fromConcept").val() + "|" + fromV)
+
 
     # アニメーション
     $("#aqbe").slideUp(100)
