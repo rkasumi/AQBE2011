@@ -217,6 +217,7 @@ loadEvent = ->
     )
 
     # display
+    orderFunction()
     $("#aqbe").hide(300)
     $("#showAql").hide(300)
     $("#condition").slideDown(300)
@@ -358,69 +359,7 @@ loadEvent = ->
 
   # 並び替え用
   $(".orderButoon").click ->
-    # error check
-    i = 0
-    error = 0
-    errorList = []
-    $(".order").each( ->
-      if $(@).val() in errorList then error = 1
-      errorList += $(@).val()
-    )
-
-    if error == 0
-
-      # 初期化
-      param = {}
-      param2 = {}
-      num = 1
-      $(".forOrder").each( -> param[num++] = $(@).val())
-      num = 1
-      $(".order").each( -> param2[num++] = $(@).val())
-
-      # 古い要素を削除
-      $("#condition div").each(-> $(@).remove())
-      $("#condition .operation").each(-> $(@).remove())
-      $("#condition .orderButoon").each(-> $(@).remove())
-
-      cnt = 1
-      for i in [1..num-1]
-        for k, v of param2
-          if "#{i}" == "#{v}"
-            [type, name, path, con, val] = param[k].split("|")
-            conditionBox = new ConditionBox(type, name, path, con, val)
-            $("#condition").append(conditionBox.toHtml(num-1, cnt++))
-            $("#condition").append(conditionBox.operation())
-
-      $($(".operation")[$(".operation").length-1]).remove()
-
-      tag = "<input type=\"button\" class=\"orderButoon\" value=\"update order\" />"
-      $("#condition").append(tag)
-
-      # select
-      checkFlag = 0
-      $(".checkbox").each(->
-        if $(@).is(":checked") == true
-          if $(@).attr("name") is "*"
-            checkFlag = 1
-            t = "<input type=\"hidden\" class=\"checkedBox\" value=\"#{$("[name=selectedConcept]").val()}\" />"
-            $("#condition").append(t)
-          unless checkFlag == 1
-            t = "<input type=\"hidden\" class=\"checkedBox\" value=\"#{$("[name=selectedConcept]").val()}#{$(@).attr("name")}\" />"
-            $("#condition").append(t)
-      )
-      $(".functionalSelect").each( ->
-        t = "<input type=\"hidden\" class=\"checkedBox\" value=\"#{$(@).val()}\" />"
-        $("#condition").append(t)
-      )
-
-      # alldelete
-      $(".object").each(-> $(@).remove())
-
-      # display
-      $("#aqbe").hide(300)
-      $("#showAql").hide(300)
-      $("#condition").slideDown(300)
-      loadEvent()
+    orderFunction()
 
 initDelete = ->
   # 入力済みの条件を削除
@@ -549,3 +488,67 @@ generateDate = (obj) ->
   target.val(value)
   $(obj).parent().hide()
 
+orderFunction = (obj) ->
+  # error check
+  i = 0
+  error = 0
+  errorList = []
+  $(".order").each( ->
+    if $(@).val() in errorList then error = 1
+    errorList += $(@).val()
+  )
+
+  if error == 0
+
+    # 初期化
+    param = {}
+    param2 = {}
+    num = 1
+    $(".forOrder").each( -> param[num++] = $(@).val())
+    num = 1
+    $(".order").each( -> param2[num++] = $(@).val())
+
+    # 古い要素を削除
+    $("#condition div").each(-> $(@).remove())
+    $("#condition .operation").each(-> $(@).remove())
+    $("#condition .orderButoon").each(-> $(@).remove())
+
+    cnt = 1
+    for i in [1..num-1]
+      for k, v of param2
+        if "#{i}" == "#{v}"
+          [type, name, path, con, val] = param[k].split("|")
+          conditionBox = new ConditionBox(type, name, path, con, val)
+          $("#condition").append(conditionBox.toHtml(num-1, cnt++))
+          $("#condition").append(conditionBox.operation())
+
+    $($(".operation")[$(".operation").length-1]).remove()
+
+    tag = "<input type=\"button\" class=\"orderButoon\" value=\"update order\" />"
+    $("#condition").append(tag)
+
+    # select
+    checkFlag = 0
+    $(".checkbox").each(->
+      if $(@).is(":checked") == true
+        if $(@).attr("name") is "*"
+          checkFlag = 1
+          t = "<input type=\"hidden\" class=\"checkedBox\" value=\"#{$("[name=selectedConcept]").val()}\" />"
+          $("#condition").append(t)
+        unless checkFlag == 1
+          t = "<input type=\"hidden\" class=\"checkedBox\" value=\"#{$("[name=selectedConcept]").val()}#{$(@).attr("name")}\" />"
+          $("#condition").append(t)
+    )
+    $(".functionalSelect").each( ->
+      t = "<input type=\"hidden\" class=\"checkedBox\" value=\"#{$(@).val()}\" />"
+      $("#condition").append(t)
+    )
+
+    # alldelete
+    $(".object").each(-> $(@).remove())
+
+    # display
+    $("#aqbe").hide(300)
+    $("#showAql").hide(300)
+    $("#condition").slideDown(300)
+    loadEvent()

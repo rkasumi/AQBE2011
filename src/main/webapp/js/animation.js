@@ -1,4 +1,4 @@
-var conditionCount, generateDate, initDelete, initInline, input, inputfunction, loadEvent, openGenerateDate;
+var conditionCount, generateDate, initDelete, initInline, input, inputfunction, loadEvent, openGenerateDate, orderFunction;
 var __indexOf = Array.prototype.indexOf || function(item) {
   for (var i = 0, l = this.length; i < l; i++) {
     if (this[i] === item) return i;
@@ -244,6 +244,7 @@ loadEvent = function() {
     $(":checked").each(function() {
       $(this)[0].checked = false;
     });
+    orderFunction();
     $("#aqbe").hide(300);
     $("#showAql").hide(300);
     return $("#condition").slideDown(300);
@@ -413,80 +414,7 @@ loadEvent = function() {
     return $("#showAql").slideDown(300);
   });
   return $(".orderButoon").click(function() {
-    var checkFlag, cnt, con, conditionBox, error, errorList, i, k, name, num, param, param2, path, tag, type, v, val, _ref, _ref2;
-    i = 0;
-    error = 0;
-    errorList = [];
-    $(".order").each(function() {
-      var _ref;
-      if (_ref = $(this).val(), __indexOf.call(errorList, _ref) >= 0) {
-        error = 1;
-      }
-      return errorList += $(this).val();
-    });
-    if (error === 0) {
-      param = {};
-      param2 = {};
-      num = 1;
-      $(".forOrder").each(function() {
-        return param[num++] = $(this).val();
-      });
-      num = 1;
-      $(".order").each(function() {
-        return param2[num++] = $(this).val();
-      });
-      $("#condition div").each(function() {
-        return $(this).remove();
-      });
-      $("#condition .operation").each(function() {
-        return $(this).remove();
-      });
-      $("#condition .orderButoon").each(function() {
-        return $(this).remove();
-      });
-      cnt = 1;
-      for (i = 1, _ref = num - 1; 1 <= _ref ? i <= _ref : i >= _ref; 1 <= _ref ? i++ : i--) {
-        for (k in param2) {
-          v = param2[k];
-          if (("" + i) === ("" + v)) {
-            _ref2 = param[k].split("|"), type = _ref2[0], name = _ref2[1], path = _ref2[2], con = _ref2[3], val = _ref2[4];
-            conditionBox = new ConditionBox(type, name, path, con, val);
-            $("#condition").append(conditionBox.toHtml(num - 1, cnt++));
-            $("#condition").append(conditionBox.operation());
-          }
-        }
-      }
-      $($(".operation")[$(".operation").length - 1]).remove();
-      tag = "<input type=\"button\" class=\"orderButoon\" value=\"update order\" />";
-      $("#condition").append(tag);
-      checkFlag = 0;
-      $(".checkbox").each(function() {
-        var t;
-        if ($(this).is(":checked") === true) {
-          if ($(this).attr("name") === "*") {
-            checkFlag = 1;
-            t = "<input type=\"hidden\" class=\"checkedBox\" value=\"" + ($("[name=selectedConcept]").val()) + "\" />";
-            $("#condition").append(t);
-          }
-          if (checkFlag !== 1) {
-            t = "<input type=\"hidden\" class=\"checkedBox\" value=\"" + ($("[name=selectedConcept]").val()) + ($(this).attr("name")) + "\" />";
-            return $("#condition").append(t);
-          }
-        }
-      });
-      $(".functionalSelect").each(function() {
-        var t;
-        t = "<input type=\"hidden\" class=\"checkedBox\" value=\"" + ($(this).val()) + "\" />";
-        return $("#condition").append(t);
-      });
-      $(".object").each(function() {
-        return $(this).remove();
-      });
-      $("#aqbe").hide(300);
-      $("#showAql").hide(300);
-      $("#condition").slideDown(300);
-      return loadEvent();
-    }
+    return orderFunction();
   });
 };
 initDelete = function() {
@@ -662,4 +590,80 @@ generateDate = function(obj) {
   target = $(obj).parent().prev().prev();
   target.val(value);
   return $(obj).parent().hide();
+};
+orderFunction = function(obj) {
+  var checkFlag, cnt, con, conditionBox, error, errorList, i, k, name, num, param, param2, path, tag, type, v, val, _ref, _ref2;
+  i = 0;
+  error = 0;
+  errorList = [];
+  $(".order").each(function() {
+    var _ref;
+    if (_ref = $(this).val(), __indexOf.call(errorList, _ref) >= 0) {
+      error = 1;
+    }
+    return errorList += $(this).val();
+  });
+  if (error === 0) {
+    param = {};
+    param2 = {};
+    num = 1;
+    $(".forOrder").each(function() {
+      return param[num++] = $(this).val();
+    });
+    num = 1;
+    $(".order").each(function() {
+      return param2[num++] = $(this).val();
+    });
+    $("#condition div").each(function() {
+      return $(this).remove();
+    });
+    $("#condition .operation").each(function() {
+      return $(this).remove();
+    });
+    $("#condition .orderButoon").each(function() {
+      return $(this).remove();
+    });
+    cnt = 1;
+    for (i = 1, _ref = num - 1; 1 <= _ref ? i <= _ref : i >= _ref; 1 <= _ref ? i++ : i--) {
+      for (k in param2) {
+        v = param2[k];
+        if (("" + i) === ("" + v)) {
+          _ref2 = param[k].split("|"), type = _ref2[0], name = _ref2[1], path = _ref2[2], con = _ref2[3], val = _ref2[4];
+          conditionBox = new ConditionBox(type, name, path, con, val);
+          $("#condition").append(conditionBox.toHtml(num - 1, cnt++));
+          $("#condition").append(conditionBox.operation());
+        }
+      }
+    }
+    $($(".operation")[$(".operation").length - 1]).remove();
+    tag = "<input type=\"button\" class=\"orderButoon\" value=\"update order\" />";
+    $("#condition").append(tag);
+    checkFlag = 0;
+    $(".checkbox").each(function() {
+      var t;
+      if ($(this).is(":checked") === true) {
+        if ($(this).attr("name") === "*") {
+          checkFlag = 1;
+          t = "<input type=\"hidden\" class=\"checkedBox\" value=\"" + ($("[name=selectedConcept]").val()) + "\" />";
+          $("#condition").append(t);
+        }
+        if (checkFlag !== 1) {
+          t = "<input type=\"hidden\" class=\"checkedBox\" value=\"" + ($("[name=selectedConcept]").val()) + ($(this).attr("name")) + "\" />";
+          return $("#condition").append(t);
+        }
+      }
+    });
+    $(".functionalSelect").each(function() {
+      var t;
+      t = "<input type=\"hidden\" class=\"checkedBox\" value=\"" + ($(this).val()) + "\" />";
+      return $("#condition").append(t);
+    });
+    $(".object").each(function() {
+      return $(this).remove();
+    });
+    $("#aqbe").hide(300);
+    $("#showAql").hide(300);
+    $("#condition").slideDown(300);
+    return loadEvent();
+  }
 };
