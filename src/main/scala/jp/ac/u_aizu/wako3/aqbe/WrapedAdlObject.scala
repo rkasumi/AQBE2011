@@ -143,7 +143,7 @@ trait AdlTo {
                       <option value="equals">equals</option>
                     </select>
                     <span func={ "func" + attr.hashCode.toString }></span>
-                    <input type="button" value="Input" name={ attr.hashCode.toString } class="inputfunction" onclick="input(this)"/>
+                    <input type="button" value="Input" name={ attr.hashCode.toString } class="inputfunction" onclick="inputfunction(this)"/>
                     {
                       attr match {
                         case _: DvQuantity⇒ <input type="hidden" class="forDevide" value={ attr.path } name={ attr.name }/>

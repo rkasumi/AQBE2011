@@ -109,7 +109,7 @@ class SelectConcept extends AdlTo {
                         <option value="count">count</option>
                       </select>
                       <span func="func-1a"></span>
-                      <input type="button" value="Input" name="-1a" class="inputfunction"/>
+                      <input type="button" value="Input" name="-1a" class="inputfunction" onclick="inputfunction(this)"/>
                     </div>
                     <div class="-1ashow" name="show" style="display: block;"></div>
                   </td>
@@ -129,7 +129,7 @@ class SelectConcept extends AdlTo {
                         <option value="count">count</option>
                       </select>
                       <span func="func-2a"></span>
-                      <input type="button" value="Input" name="-2a" class="inputfunction"/>
+                      <input type="button" value="Input" name="-2a" class="inputfunction" onclick="inputfunction(this)"/>
                     </div>
                     <div class="-2ashow" name="show" style="display: block;"></div>
                   </td>
@@ -184,7 +184,7 @@ class SelectConcept extends AdlTo {
               <option value="rename">rename</option>
             </select>
             <span func={ "func" + node.hashCode.toString + "a" }></span>
-            <input type="button" value="Input" name={ node.hashCode.toString + "a" } class="inputfunction"/>
+            <input type="button" value="Input" name={ node.hashCode.toString + "a" } class="inputfunction" onclick="inputfunction(this)"/>
           </div>
           <div class={ node.hashCode.toString + "ashow" } name="show" style="display: block;"></div>
         </td>
@@ -205,7 +205,7 @@ class SelectConcept extends AdlTo {
               <option value="not">!=</option>
             </select>
             <input type="text" class="node_name" name={ node.hashCode.toString + "n" } placeholder="Free text"/>
-            <input type="button" value="Input" name={ node.hashCode.toString + "n" } class="input"/>
+            <input type="button" value="Input" name={ node.hashCode.toString + "n" } class="input" onclick="input(this)"/>
           </div>
           <div class={ node.hashCode.toString + "nfunc" } name="func" style="display: none;">
             <select class="function" name={ node.hashCode.toString + "n" }>
@@ -213,7 +213,7 @@ class SelectConcept extends AdlTo {
               <option value="rename">rename</option>
             </select>
             <span func={ "func" + node.hashCode.toString + "n" }></span>
-            <input type="button" value="Input" name={ node.hashCode.toString + "n" } class="inputfunction"/>
+            <input type="button" value="Input" name={ node.hashCode.toString + "n" } class="inputfunction" onclick="inputfunction(this)"/>
           </div>
           <div class={ node.hashCode.toString + "nshow" } name="show" style="display: block;"></div>
         </td>
@@ -234,7 +234,7 @@ class SelectConcept extends AdlTo {
               <option value="not">!=</option>
             </select>
             <input type="text" class="node_context" name={ node.hashCode.toString + "x" } placeholder="Free text"/>
-            <input type="button" value="Input" name={ node.hashCode.toString + "x" } class="input"/>
+            <input type="button" value="Input" name={ node.hashCode.toString + "x" } class="input" onclick="input(this)"/>
           </div>
           <div class={ node.hashCode.toString + "xfunc" } name="func" style="display: none;">
             <select class="function" name={ node.hashCode.toString + "x" }>
@@ -242,7 +242,7 @@ class SelectConcept extends AdlTo {
               <option value="rename">rename</option>
             </select>
             <span func={ "func" + node.hashCode.toString + "x" }></span>
-            <input type="button" value="Input" name={ node.hashCode.toString + "x" } class="inputfunction"/>
+            <input type="button" value="Input" name={ node.hashCode.toString + "x" } class="inputfunction" onclick="inputfunction(this)"/>
           </div>
           <div class={ node.hashCode.toString + "xshow" } name="show" style="display: block;"></div>
         </td>
@@ -263,7 +263,7 @@ class SelectConcept extends AdlTo {
               <option value="not">!=</option>
             </select>
             <input type="text" class="node_composer" name={ node.hashCode.toString + "m" } placeholder="Free text"/>
-            <input type="button" value="Input" name={ node.hashCode.toString + "m" } class="input"/>
+            <input type="button" value="Input" name={ node.hashCode.toString + "m" } class="input" onclick="input(this)"/>
           </div>
           <div class={ node.hashCode.toString + "mfunc" } name="func" style="display: none;">
             <select class="function" name={ node.hashCode.toString + "m" }>
@@ -271,7 +271,7 @@ class SelectConcept extends AdlTo {
               <option value="rename">rename</option>
             </select>
             <span func={ "func" + node.hashCode.toString + "m" }></span>
-            <input type="button" value="Input" name={ node.hashCode.toString + "m" } class="inputfunction"/>
+            <input type="button" value="Input" name={ node.hashCode.toString + "m" } class="inputfunction" onclick="inputfunction(this)"/>
           </div>
           <div class={ node.hashCode.toString + "mshow" } name="show" style="display: block;"></div>
         </td>

@@ -1,4 +1,4 @@
-var conditionCount, initDelete, initInline, input, loadEvent;
+var conditionCount, initDelete, initInline, input, inputfunction, loadEvent;
 var __indexOf = Array.prototype.indexOf || function(item) {
   for (var i = 0, l = this.length; i < l; i++) {
     if (this[i] === item) return i;
@@ -152,11 +152,12 @@ loadEvent = function() {
       obj.slideDown(200);
       objC.hide();
       $(this).val("Close Function");
-      return $(this).prev().val("Input Condition");
+      $(this).prev().val("Input Condition");
     } else {
       obj.slideUp(200);
-      return $(this).val("Input Function");
+      $(this).val("Input Function");
     }
+    return exit();
   });
   $(".dv_quantity_unit").change(function() {
     var hash, max, min;
@@ -314,99 +315,6 @@ loadEvent = function() {
         $("#inline iframe").attr("src", "" + baseUrl + "?inlineField=" + hash + "_" + ($(this).val()));
         return $("#inline").slideDown(500);
     }
-  });
-  $(".inputfunction").click(function() {
-    var con, con2, cons2, funcValue, hash, key, name, number, param, path, tag, tempCon, tempName, tempPath, tempVal, value;
-    hash = $(this).attr("name");
-    param = {};
-    $("[name=" + hash + "]").each(function() {
-      return param[$(this).attr("class")] = $(this).val();
-    });
-    for (key in param) {
-      value = param[key];
-      switch (key) {
-        case "name":
-          name = value;
-          break;
-        case "path":
-          path = $("[name=selectedConcept]").val() + value;
-      }
-    }
-    number = "" + hash + "_num" + (conditionCount++);
-    funcValue = $("." + hash + "func .function").val();
-    switch (funcValue) {
-      case "exists":
-        tag = "<div class=\"object\" name=\"" + number + "\">";
-        tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"" + number + "\" /> ";
-        tag += "exists";
-        tag += "<input class=\"value\" type=\"hidden\" value=\"exists|" + name + "|" + path + "||\" />";
-        tag += "</div>";
-        break;
-      case "count":
-        tag = "<div class=\"object\" name=\"" + number + "\">";
-        tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"" + number + "\" /> ";
-        tag += "count";
-        tag += "<input class=\"functionalSelect\" type=\"hidden\" value=\"COUNT(" + path + ")\" />";
-        tag += "</div>";
-        break;
-      case "rename":
-        tag = "<div class=\"object\" name=\"" + number + "\">";
-        tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"" + number + "\" /> ";
-        tag += "rename " + ($("." + hash + "_rename").val());
-        tag += "<input class=\"functionalSelect\" type=\"hidden\" value=\"" + path + " AS '" + ($("." + hash + "_rename").val()) + "'\" />";
-        tag += "</div>";
-        break;
-      case "devide":
-        tempName = name + " / " + $("." + hash + "_devide option:selected").text();
-        tempPath = "(" + path + "/magnitude / " + $("[name=selectedConcept]").val() + $("." + hash + "_devide").val() + "/magnitude)";
-        tempCon = $("." + hash + "_devide_condition option:selected").val();
-        switch (tempCon) {
-          case "eq":
-            con = "=";
-            con2 = "=";
-            break;
-          case "not":
-            con = "!=";
-            con2 = "!=";
-            break;
-          case "big":
-            con = "&lt;";
-            con2 = "%big%";
-            break;
-          case "small":
-            con = "&gt;";
-            con2 = "%small%";
-            break;
-          case "bigeq":
-            con = "&lt;=";
-            cons2 = "%big%=";
-            break;
-          case "smalleq":
-            con = "&gt;=";
-            con2 = "%small%=";
-            break;
-          default:
-            con = "=";
-        }
-        tempVal = $("." + hash + "_devide_value").val();
-        tag = "<div class=\"object\" name=\"" + number + "\">";
-        tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"" + number + "\" /> ";
-        tag += "" + tempName + " " + con + " " + tempVal;
-        tag += "<input class=\"value\" type=\"hidden\" value=\"devide|" + tempName + "|" + tempPath + "|" + con2 + "|" + tempVal + "\" />";
-        tag += "</div>";
-        break;
-      case "in":
-      case "notin":
-      case "equals":
-        tag = "<div class=\"object\" name=\"" + number + "\">";
-        tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"" + number + "\" /> ";
-        tag += "" + name + " " + funcValue + " [object]";
-        tag += "<input class=\"value\" type=\"hidden\" value=\"" + funcValue + "|" + name + "|" + path + "|" + funcValue + "|" + ($("." + hash + "_" + funcValue).val()) + "\" />";
-        tag += "</div>";
-    }
-    $("." + hash + "show").append(tag);
-    $("[name=" + number + "]").show();
-    return initDelete();
   });
   $("#generateAql").click(function() {
     var c, from, fromCount, fromKey, fromValue, i, j, k, key, selectFlag, tag, tagTemp, v, value, _i, _len, _ref, _ref2;
@@ -631,5 +539,98 @@ input = function(obj) {
   adl = new AdlAttribute(name, path, condition, valueList, number);
   $("." + hash + "show").append(adl.toHtml());
   $("[name=" + number + "]").show(100);
+  return initDelete();
+};
+inputfunction = function(obj) {
+  var con, con2, cons2, funcValue, hash, key, name, number, param, path, tag, tempCon, tempName, tempPath, tempVal, value;
+  hash = $(obj).attr("name");
+  param = {};
+  $("[name=" + hash + "]").each(function() {
+    return param[$(this).attr("class")] = $(this).val();
+  });
+  for (key in param) {
+    value = param[key];
+    switch (key) {
+      case "name":
+        name = value;
+        break;
+      case "path":
+        path = $("[name=selectedConcept]").val() + value;
+    }
+  }
+  number = "" + hash + "_num" + (conditionCount++);
+  funcValue = $("." + hash + "func .function").val();
+  switch (funcValue) {
+    case "exists":
+      tag = "<div class=\"object\" name=\"" + number + "\">";
+      tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"" + number + "\" /> ";
+      tag += "exists";
+      tag += "<input class=\"value\" type=\"hidden\" value=\"exists|" + name + "|" + path + "||\" />";
+      tag += "</div>";
+      break;
+    case "count":
+      tag = "<div class=\"object\" name=\"" + number + "\">";
+      tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"" + number + "\" /> ";
+      tag += "count";
+      tag += "<input class=\"functionalSelect\" type=\"hidden\" value=\"COUNT(" + path + ")\" />";
+      tag += "</div>";
+      break;
+    case "rename":
+      tag = "<div class=\"object\" name=\"" + number + "\">";
+      tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"" + number + "\" /> ";
+      tag += "rename " + ($("." + hash + "_rename").val());
+      tag += "<input class=\"functionalSelect\" type=\"hidden\" value=\"" + path + " AS '" + ($("." + hash + "_rename").val()) + "'\" />";
+      tag += "</div>";
+      break;
+    case "devide":
+      tempName = name + " / " + $("." + hash + "_devide option:selected").text();
+      tempPath = "(" + path + "/magnitude / " + $("[name=selectedConcept]").val() + $("." + hash + "_devide").val() + "/magnitude)";
+      tempCon = $("." + hash + "_devide_condition option:selected").val();
+      switch (tempCon) {
+        case "eq":
+          con = "=";
+          con2 = "=";
+          break;
+        case "not":
+          con = "!=";
+          con2 = "!=";
+          break;
+        case "big":
+          con = "&lt;";
+          con2 = "%big%";
+          break;
+        case "small":
+          con = "&gt;";
+          con2 = "%small%";
+          break;
+        case "bigeq":
+          con = "&lt;=";
+          cons2 = "%big%=";
+          break;
+        case "smalleq":
+          con = "&gt;=";
+          con2 = "%small%=";
+          break;
+        default:
+          con = "=";
+      }
+      tempVal = $("." + hash + "_devide_value").val();
+      tag = "<div class=\"object\" name=\"" + number + "\">";
+      tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"" + number + "\" /> ";
+      tag += "" + tempName + " " + con + " " + tempVal;
+      tag += "<input class=\"value\" type=\"hidden\" value=\"devide|" + tempName + "|" + tempPath + "|" + con2 + "|" + tempVal + "\" />";
+      tag += "</div>";
+      break;
+    case "in":
+    case "notin":
+    case "equals":
+      tag = "<div class=\"object\" name=\"" + number + "\">";
+      tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"" + number + "\" /> ";
+      tag += "" + name + " " + funcValue + " [object]";
+      tag += "<input class=\"value\" type=\"hidden\" value=\"" + funcValue + "|" + name + "|" + path + "|" + funcValue + "|" + ($("." + hash + "_" + funcValue).val()) + "\" />";
+      tag += "</div>";
+  }
+  $("." + hash + "show").append(tag);
+  $("[name=" + number + "]").show();
   return initDelete();
 };

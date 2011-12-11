@@ -132,6 +132,7 @@ loadEvent = ->
     else
       obj.slideUp(200)
       $(@).val("Input Function")
+    exit()
 
   # DvQuantityの複数条件切り替え
   $(".dv_quantity_unit").change ->
@@ -254,66 +255,6 @@ loadEvent = ->
         $("#inline iframe").attr("src", "#{baseUrl}?inlineField=#{hash}_#{$(@).val()}")
         $("#inline").slideDown(500)
 
-
-  $(".inputfunction").click ->
-    hash = $(@).attr("name")
-    param = {}
-    $("[name=#{hash}]").each( -> param[$(@).attr("class")] = $(@).val())
-
-    for key, value of param
-      switch key
-        when "name" then name = value
-        when "path" then path = $("[name=selectedConcept]").val() + value
-
-    number = "#{hash}_num#{conditionCount++}"
-    funcValue = $(".#{hash}func .function").val()
-    switch funcValue
-      when "exists"
-        tag  = "<div class=\"object\" name=\"#{number}\">"
-        tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"#{number}\" /> "
-        tag += "exists"
-        tag += "<input class=\"value\" type=\"hidden\" value=\"exists|#{name}|#{path}||\" />"
-        tag += "</div>"
-      when "count"
-        tag  = "<div class=\"object\" name=\"#{number}\">"
-        tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"#{number}\" /> "
-        tag += "count"
-        tag += "<input class=\"functionalSelect\" type=\"hidden\" value=\"COUNT(#{path})\" />"
-        tag += "</div>"
-      when "rename"
-        tag  = "<div class=\"object\" name=\"#{number}\">"
-        tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"#{number}\" /> "
-        tag += "rename #{$(".#{hash}_rename").val()}"
-        tag += "<input class=\"functionalSelect\" type=\"hidden\" value=\"#{path} AS '#{$(".#{hash}_rename").val()}'\" />"
-        tag += "</div>"
-      when "devide"
-        tempName = name + " / " + $(".#{hash}_devide option:selected").text()
-        tempPath = "(" + path + "/magnitude / " + $("[name=selectedConcept]").val() + $(".#{hash}_devide").val() + "/magnitude)"
-        tempCon  = $(".#{hash}_devide_condition option:selected").val()
-        switch tempCon
-          when "eq" then con = "="; con2 = "="
-          when "not" then con = "!="; con2 = "!="
-          when "big" then con = "&lt;"; con2 = "%big%"
-          when "small" then con =  "&gt;"; con2 = "%small%"
-          when "bigeq" then con = "&lt;="; cons2 = "%big%="
-          when "smalleq" then con = "&gt;="; con2 = "%small%="
-          else
-            con = "="
-        tempVal  = $(".#{hash}_devide_value").val()
-        tag  = "<div class=\"object\" name=\"#{number}\">"
-        tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"#{number}\" /> "
-        tag += "#{tempName} #{con} #{tempVal}"
-        tag += "<input class=\"value\" type=\"hidden\" value=\"devide|#{tempName}|#{tempPath}|#{con2}|#{tempVal}\" />"
-        tag += "</div>"
-      when "in", "notin", "equals"
-        tag  = "<div class=\"object\" name=\"#{number}\">"
-        tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"#{number}\" /> "
-        tag += "#{name} #{funcValue} [object]"
-        tag += "<input class=\"value\" type=\"hidden\" value=\"#{funcValue}|#{name}|#{path}|#{funcValue}|#{$(".#{hash}_#{funcValue}").val()}\" />"
-        tag += "</div>"
-    $(".#{hash}show").append(tag)
-    $("[name=#{number}]").show()
-    initDelete()
 
 
 
@@ -515,4 +456,65 @@ input = (obj) ->
   $(".#{hash}show").append(adl.toHtml())
   $("[name=#{number}]").show(100)
 
+  initDelete()
+
+# Inputボタン (function)
+inputfunction = (obj) ->
+  hash = $(obj).attr("name")
+  param = {}
+  $("[name=#{hash}]").each( -> param[$(@).attr("class")] = $(@).val())
+
+  for key, value of param
+    switch key
+      when "name" then name = value
+      when "path" then path = $("[name=selectedConcept]").val() + value
+
+  number = "#{hash}_num#{conditionCount++}"
+  funcValue = $(".#{hash}func .function").val()
+  switch funcValue
+    when "exists"
+      tag  = "<div class=\"object\" name=\"#{number}\">"
+      tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"#{number}\" /> "
+      tag += "exists"
+      tag += "<input class=\"value\" type=\"hidden\" value=\"exists|#{name}|#{path}||\" />"
+      tag += "</div>"
+    when "count"
+      tag  = "<div class=\"object\" name=\"#{number}\">"
+      tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"#{number}\" /> "
+      tag += "count"
+      tag += "<input class=\"functionalSelect\" type=\"hidden\" value=\"COUNT(#{path})\" />"
+      tag += "</div>"
+    when "rename"
+      tag  = "<div class=\"object\" name=\"#{number}\">"
+      tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"#{number}\" /> "
+      tag += "rename #{$(".#{hash}_rename").val()}"
+      tag += "<input class=\"functionalSelect\" type=\"hidden\" value=\"#{path} AS '#{$(".#{hash}_rename").val()}'\" />"
+      tag += "</div>"
+    when "devide"
+      tempName = name + " / " + $(".#{hash}_devide option:selected").text()
+      tempPath = "(" + path + "/magnitude / " + $("[name=selectedConcept]").val() + $(".#{hash}_devide").val() + "/magnitude)"
+      tempCon  = $(".#{hash}_devide_condition option:selected").val()
+      switch tempCon
+        when "eq" then con = "="; con2 = "="
+        when "not" then con = "!="; con2 = "!="
+        when "big" then con = "&lt;"; con2 = "%big%"
+        when "small" then con =  "&gt;"; con2 = "%small%"
+        when "bigeq" then con = "&lt;="; cons2 = "%big%="
+        when "smalleq" then con = "&gt;="; con2 = "%small%="
+        else
+          con = "="
+      tempVal  = $(".#{hash}_devide_value").val()
+      tag  = "<div class=\"object\" name=\"#{number}\">"
+      tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"#{number}\" /> "
+      tag += "#{tempName} #{con} #{tempVal}"
+      tag += "<input class=\"value\" type=\"hidden\" value=\"devide|#{tempName}|#{tempPath}|#{con2}|#{tempVal}\" />"
+      tag += "</div>"
+    when "in", "notin", "equals"
+      tag  = "<div class=\"object\" name=\"#{number}\">"
+      tag += "<input type=\"button\" value=\"x\" class=\"delete\" name=\"#{number}\" /> "
+      tag += "#{name} #{funcValue} [object]"
+      tag += "<input class=\"value\" type=\"hidden\" value=\"#{funcValue}|#{name}|#{path}|#{funcValue}|#{$(".#{hash}_#{funcValue}").val()}\" />"
+      tag += "</div>"
+  $(".#{hash}show").append(tag)
+  $("[name=#{number}]").show()
   initDelete()
