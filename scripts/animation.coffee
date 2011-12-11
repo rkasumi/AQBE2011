@@ -167,19 +167,22 @@ loadEvent = ->
         "<option value=\"AND\">AND</option>" +
         "<option value=\"OR\">OR</option>" +
         "</select>"
-        $("#condition").append(temp)
-      $("#sendCount").val("1")
+        $("#condition").append(temp) # オペレーションを追加
+        $(".orderButoon").remove() # 更新ボタンを削除
 
       # where & operation
       num = 0
       for key, value of param
         num++
+      tempNum = $("#sendCount").val() - 0
+      num = num + tempNum
+      $("#sendCount").val(num)
 
       cnt = 1
       for key, value of param
         [type, name, path, con, val] = value.split("|")
         conditionBox = new ConditionBox(type, name, path, con, val)
-        $("#condition").append(conditionBox.toHtml(num, cnt++))
+        $("#condition").append(conditionBox.toHtml(num, (cnt++)+tempNum))
         $("#condition").append(conditionBox.operation())
 
       $($(".operation")[$(".operation").length-1]).remove()

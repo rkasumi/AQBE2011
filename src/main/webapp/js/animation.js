@@ -185,7 +185,7 @@ loadEvent = function() {
     });
   });
   $(".sendConditionBox").click(function() {
-    var checkFlag, cnt, con, conditionBox, i, key, name, num, param, path, tag, temp, type, val, value, _ref;
+    var checkFlag, cnt, con, conditionBox, i, key, name, num, param, path, tag, temp, tempNum, type, val, value, _ref;
     param = {};
     i = 0;
     $("[name=" + ($(this).attr("name")) + "] .value").each(function() {
@@ -195,19 +195,22 @@ loadEvent = function() {
       if ($("#sendCount").val() !== "0") {
         temp = "<select class=\"operation\">" + "<option value=\"AND\">AND</option>" + "<option value=\"OR\">OR</option>" + "</select>";
         $("#condition").append(temp);
+        $(".orderButoon").remove();
       }
-      $("#sendCount").val("1");
       num = 0;
       for (key in param) {
         value = param[key];
         num++;
       }
+      tempNum = $("#sendCount").val() - 0;
+      num = num + tempNum;
+      $("#sendCount").val(num);
       cnt = 1;
       for (key in param) {
         value = param[key];
         _ref = value.split("|"), type = _ref[0], name = _ref[1], path = _ref[2], con = _ref[3], val = _ref[4];
         conditionBox = new ConditionBox(type, name, path, con, val);
-        $("#condition").append(conditionBox.toHtml(num, cnt++));
+        $("#condition").append(conditionBox.toHtml(num, (cnt++) + tempNum));
         $("#condition").append(conditionBox.operation());
       }
       $($(".operation")[$(".operation").length - 1]).remove();
