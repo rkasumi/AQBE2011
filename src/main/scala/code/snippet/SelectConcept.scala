@@ -42,6 +42,14 @@ class SelectConcept extends AdlTo {
         <xml:group>
           <div id="xml">
             <table>
+              <tr>
+                <td colspan="2">
+                  <select id="patient">
+                    <option value="single">Single Patient</option>
+                    <option value="multiple">Multiple Patient</option>
+                  </select>
+                </td>
+              </tr>
               <tr><th>EHR</th><th>COMPOSITION</th><th>ENTRY</th></tr>
               <tr>
                 <td>

@@ -345,7 +345,11 @@ loadEvent = function() {
       tag += "\t*\n";
     }
     tag += "FROM\n";
-    tag += "\tEHR e[ehr_id=$ehrId]\n";
+    if ($("#patient :selected").val() === "single") {
+      tag += "\tEHR e[ehr_id=$ehrId]\n";
+    } else {
+      tag += "\tEHR e\n";
+    }
     i = 0;
     from = {};
     _ref = $("#fromConcept").val().split("|");
