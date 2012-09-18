@@ -276,58 +276,26 @@ loadEvent = ->
 
 
   $("#generateAql").click ->
-    # SELECT
-    tag = "SELECT \n"
-    selectFlag = 0
-    $(".checkedBox").each( ->
-      selectFlag = 1
-      tag += "\t#{$(@).val()},\n"
-    )
-    tag = tag.replace(/,\n$/, "\n") if selectFlag == 1
-    tag += "\t*\n" if selectFlag == 0
+    query = {}
 
     # FROM
-    tag += "FROM\n"
-
-    if $("#patient :selected").val() == "single"
-      tag += "\tEHR e[ehr_id=$ehrId]\n"
-    else
-      tag += "\tEHR e\n"
-
-    i = 0
-    from = {}
+    contain = {}
     for v in $("#fromConcept").val().split("|")
-      [j, k] = v.split(",")
-      unless from["#{j}"]?
-        from["#{j}"] = "\t\t" + k + "\n"
-      else
-        from["#{j}"] += "\t\tCONTAINS " + k + "\n"
+      [a1, a2] = v.split(" ")
+      [a3, a4] = a2.split("[")
+      contain["#{a3}"] = a4.replace(/\./g, "___").replace("]", "")
 
-    # $("#selectComposition option, #selectEntry option").each( ->
-      # temp = ""
-      # temp += "COMPOSITION" if $(@).attr("name").indexOf("COMPOSITION") != -1
-      # temp += "OBSERVATION" if $(@).attr("name").indexOf("OBSERVATION") != -1
-      # temp += "SECTION" if $(@).attr("name").indexOf("SECTION") != -1
-      # temp += "ITEM_TREE" if $(@).attr("name").indexOf("ITEM_TREE") != -1
-      # temp += "EVALUATION" if $(@).attr("name").indexOf("EVALUATION") != -1
-      # temp += "INSTRUCTION" if $(@).attr("name").indexOf("INSTRUCTION") != -1
-      # temp += "ACTION" if $(@).attr("name").indexOf("ACTION") != -1
-      # temp += "ADMIN_ENTRY" if $(@).attr("name").indexOf("ADMIN_ENTRY") != -1
-      # temp += " c#{i++}[#{$(@).attr("name")}]\n"
-    # )
-
-    fromCount = 0
-    for fromKey, fromValue of from then fromCount++
-    if fromCount <= 1
-      tag += "\tCONTAINS " + "#{fromValue}".replaceAll("\t\t", "\t").replace(/^\t/, "")
-    else
-      for fromKey, fromValue of from
-        if fromKey == "0" then tag += "\tCONTAINS (\n"
-        unless fromKey == "0" then tag += "\tAND\n"
-        tag += "#{fromValue}"
-      tag += "\t)\n"
+    # SELECT
+    selection = {}
+    $(".checkedBox").each( ->
+      listNum = $(@).val().split("/")
+      cond = $(@).val().replace(listNum[0], contain["#{listNum[0]}"] + ".").replace(/\.$/, "")
+      selection["#{cond}"] = 1
+    )
+    query["selection"] = selection
 
     # WHERE
+    condition = {}
     tagTemp = ""
     v = {}
     c = {}
@@ -337,28 +305,61 @@ loadEvent = ->
     $(".operation").each( -> c["#{i++}"] = $(@).val())
 
     for key, value of v
-      tagTemp += "\t#{value}"
-      tagTemp += " #{c[key]}\n" if c[key]?
+      vList = value.split(" ")
+      listNum = value.split("/")
+      vListPath = vList[0].replace(listNum[0], contain["#{listNum[0]}"] + ".")
+      vListCond = vList[1]
+      vListCond = vListCond.replace("%big%", "$lt").replace("%small%", "$gt")
+      vListValue = ""
+      vi = 0
+      for vl in vList
+        unless vi is 0 or vi is 1
+          vListValue += vl + " "
+        vi += 1
+      vListValue = vListValue.replace(/\s$/, "").replace(/'/g, "")
 
-    tag += "WHERE\n" + tagTemp unless tagTemp == ""
+      temp = {}
+      temp["#{vListPath}"] = vListValue
+      if vListCond is "$lt"
+        vListValue = {"$lt": temp}
+      if vListCond is "$gt"
+        vListValue = {"$gt": temp}
+      console.log vListValue
 
+      if c[key] is "OR"
+        if temp?
+          condition["$or"] = [temp, {vListPath, vListValue}]
+          temp = undefined
+        else
+          temp = [vListPath, vListValue]
+      else
+        condition["#{vListPath}"] = vListValue
+
+    query["condition"] = condition
 
     # display
     $("#xml").hide(300)
     $("#condition").hide(300)
 
     # inline用
-    unless $("[name=inlineField]").val() == ""
-      $("#inlineArea").val(tag.replaceAll("\n", "%cr%").replaceAll("\t", "%tab%"))
-      $(".inlineShow").show()
+    # unless $("[name=inlineField]").val() == ""
+      # $("#inlineArea").val(tag.replaceAll("\n", "%cr%").replaceAll("\t", "%tab%"))
+      # $(".inlineShow").show()
+      #
+
+    $.ajax(
+      type: "POST"
+      url: "http://wako3.u-aizu.ac.jp:8080/service/find"
+      data: JSON.stringify(query)
+      contentType: "text/json"
+      dataType: "json"
+      success: (data) ->
+        console.log data
+    )
+
 
     # ＜＞を小文字に変換してtextareaに追加
-    tag = tag.replaceAll("%big%", "<")
-    tag = tag.replaceAll("%small%", ">")
-    tag = tag.replaceAll("notin", "not in")
-    tag = tag.replaceAll("%cr%", "\n")
-    tag = tag.replaceAll("%tab%", "\t")
-    $("#showAql textarea").val(tag)
+    $("#showAql textarea").val(JSON.stringify(query))
 
     $("#showAql").slideDown(300)
 
